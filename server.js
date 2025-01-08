@@ -44,7 +44,7 @@ app.use("/api/courses", require("./routes/courseRoutes"));
 
 // Serve React frontend
 app.get("/", (req, res) => {
-    res.send("Backend Running !!!!!")
+    res.send("Backend Running..")
 });
 
 app.post('/employees', async (req, res) => {
