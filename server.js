@@ -18,8 +18,6 @@ const limiter = rateLimit({
     message: "Too many requests, please try again later.",
 });
 
-const Employee = require('./models/User');
-
 app.use(cors('*'));
 app.use(bodyParser.json());
 app.use(express.json());
@@ -40,45 +38,16 @@ app.use((req, res, next) => {
 
 // API Routes
 app.use("/api/users", require("./routes/userRoutes"));
-app.use("/api/courses", require("./routes/courseRoutes"));
+app.use("/api/emp", require("./routes/employeeRoutes"));
+app.use("/api/kpi", require("./routes/kpiRoutes"));
+app.use("/api/Performance", require("./routes/Performance"));
 
 // Serve React frontend
 app.get("/", (req, res) => {
     res.send("Backend Running..")
 });
 
-app.post('/employees', async (req, res) => {
-    const { name, email, designation, managerId, password } = req.body;
 
-    try {
-        const validManagerId = managerId === "" ? null : managerId;
-
-        const newEmployee = new Employee({
-            name,
-            email,
-            role: designation,
-            manager_id: validManagerId,  // Use sanitized managerId
-            password,  // Include password field
-            subordinates: [],
-            ratings: [],
-        });
-
-        await newEmployee.save();
-
-        // Add employee to manager's subordinates list if managerId is provided
-        if (validManagerId) {
-            const manager = await Employee.findById(validManagerId);
-            if (manager) {
-                manager.subordinates.push(newEmployee._id);
-                await manager.save();
-            }
-        }
-
-        res.status(201).json({ message: 'Employee added successfully', employee: newEmployee });
-    } catch (error) {
-        res.status(500).json({ message: 'Error adding employee', error });
-    }
-});
 
 app.post('/reviews/self', async (req, res) => {
     const { employeeId, kpiId, selfRating, comments } = req.body;
@@ -172,6 +141,7 @@ app.get('/reviews/overall/:employeeId', async (req, res) => {
         res.status(500).json({ message: 'Error saving overall review', error });
     }
 });
+const Employee = require('./models/User');
 
 app.get("/managers", async (req, res) => {
     try {
@@ -180,24 +150,6 @@ app.get("/managers", async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error fetching managers" });
-    }
-});
-
-app.get("/api/employees", async (req, res) => {
-    try {
-        const { managerId, page = 1, perPage = 10 } = req.query;
-
-        const query = managerId ? { manager_id: managerId } : {};
-        const skip = (parseInt(page) - 1) * parseInt(perPage);
-        const limit = parseInt(perPage);
-
-        const employees = await Employee.find(query).skip(skip).limit(limit);
-        const total = await Employee.countDocuments(query);
-
-        res.json({ employees, total });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error fetching employees" });
     }
 });
 
