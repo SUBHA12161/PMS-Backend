@@ -53,7 +53,6 @@ const getEmployee = async (req, res) => {
 const getEmployeeCount = async (req, res) => {
     try {
         const { role, manager_id, _id } = req.user;
-        console.log("req.user == ", req.user);
 
         if (role === "Admin" || role === "CEO") {
             const stats = await Employee.aggregate([

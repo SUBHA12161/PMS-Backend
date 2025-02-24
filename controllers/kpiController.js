@@ -2,8 +2,8 @@ const Kpi = require('../models/Kpi');
 
 const addKpi = async (req, res) => {
     try {
-        const { name, weightage, goal, achievement } = req.body;
-        if (!name || !weightage || !goal || !achievement) {
+        const { name, weightage, goal } = req.body;
+        if (!name || !weightage || !goal ) {
             return res.status(400).json({ error: "All fields are required." });
         }
 
@@ -11,7 +11,6 @@ const addKpi = async (req, res) => {
             name,
             weightage,
             goal,
-            achievement,
             addedBy: req.user._id,
         });
 

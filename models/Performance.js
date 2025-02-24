@@ -14,9 +14,25 @@ const PerformanceSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             required: true,
         },
-        remarks: {
+        weightage: {
             type: String,
             required: true,
+        },
+        goal: {
+            type: String,
+            required: true,
+        },
+        manager_achievement: {
+            type: String,
+            default: "0",
+        },
+        emp_achievement: {
+            type: String,
+            default: "0",
+        },
+        remarks: {
+            type: String,
+            default: "",
         },
     },
     { timestamps: true }

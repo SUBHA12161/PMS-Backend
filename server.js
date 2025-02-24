@@ -154,6 +154,7 @@ app.get("/managers", async (req, res) => {
 });
 
 // MongoDB Connection
+mongoose.set('debug', false);
 mongoose
     .connect(process.env.MONGO_URI)
     .then(() => console.log("Connected to MongoDB"))

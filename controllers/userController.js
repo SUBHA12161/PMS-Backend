@@ -110,4 +110,15 @@ const googleLogin = async (req, res) => {
     }
 };
 
-module.exports = { registerUser, loginUser, getUserProfile, googleLogin };
+
+const getManagers = async (req, res) => {
+    try {
+        const managers = await User.find({ role: { $in: ["CEO", "Program Head", "Program Manager", "Business Manager", "Manager"] } }).select("name _id");
+        res.json({ employees: managers });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error fetching managers" });
+    }
+};
+
+module.exports = { registerUser, loginUser, getUserProfile, googleLogin, getManagers };
