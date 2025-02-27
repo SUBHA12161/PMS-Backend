@@ -143,4 +143,20 @@ const updatePerformance = async (req, res) => {
     }
 };
 
-module.exports = { addPerformance, getPerformance, updatePerformance };
+const updatePerformanceManager = async (req, res) => {
+    try {
+        const { _id, manager_achievement, remarks } = req.body;
+
+        const data = await Performance.updateOne({ _id }, { $set: { manager_achievement, remarks } })
+        if (data.modifiedCount) {
+            res.status(200).json({ Message: "Updated Succesfull." });
+        } else {
+            res.status(500).json({ message: "Internal server error." });
+        }
+    } catch (error) {
+        console.error("Error in update Performance:", error);
+        res.status(500).json({ message: "Internal server error." });
+    }
+};
+
+module.exports = { addPerformance, getPerformance, updatePerformance, updatePerformanceManager };

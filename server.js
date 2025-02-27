@@ -47,8 +47,6 @@ app.get("/", (req, res) => {
     res.send("Backend Running..")
 });
 
-
-
 app.post('/reviews/self', async (req, res) => {
     const { employeeId, kpiId, selfRating, comments } = req.body;
 
